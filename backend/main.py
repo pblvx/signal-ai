@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Any
 
 from backend.services.data_fetcher import get_reddit_trends, get_hackernews_trends
+from backend.services.ai_analyzer import analyze_trends
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -39,3 +40,19 @@ def get_trends() -> list[dict[str, Any]]:
     
     # Combine both lists
     return reddit_data + hn_data
+
+@app.get("/api/summary", response_model=dict[str, Any])
+async def get_summary() -> dict[str, Any]:
+    """
+    Endpoint that fetches real trends and generates an AI summary using Gemini.
+    """
+    # a) Call Reddit and HackerNews
+    reddit_data = get_reddit_trends(limit=5)
+    hn_data = get_hackernews_trends(limit=5)
+    combined_data = reddit_data + hn_data
+    
+    # b) Pass combined list to analyze_trends
+    summary = await analyze_trends(combined_data)
+    
+    # c) Return the Gemini dictionary
+    return summary
