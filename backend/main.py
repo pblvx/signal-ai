@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Any
 
+from backend.services.data_fetcher import get_reddit_trends, get_hackernews_trends
+
 # Initialize FastAPI application
 app = FastAPI(
     title="Signal API",
@@ -28,24 +30,12 @@ async def root_health_check() -> dict[str, str]:
     }
 
 @app.get("/api/trends", response_model=list[dict[str, Any]])
-async def get_mock_trends() -> list[dict[str, Any]]:
+def get_trends() -> list[dict[str, Any]]:
     """
-    Mock endpoint returning a list of fake trends for testing purposes.
+    Endpoint returning real trends from Reddit and Hacker News.
     """
-    return [
-        {
-            "topic": "AI Agents",
-            "category": "Technology",
-            "growth": 85
-        },
-        {
-            "topic": "Sustainable Packaging",
-            "category": "Environment",
-            "growth": 62
-        },
-        {
-            "topic": "Remote Work Tools",
-            "category": "Business",
-            "growth": 45
-        }
-    ]
+    reddit_data = get_reddit_trends(limit=5)
+    hn_data = get_hackernews_trends(limit=5)
+    
+    # Combine both lists
+    return reddit_data + hn_data
