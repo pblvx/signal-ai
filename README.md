@@ -36,8 +36,9 @@ Sources (Reddit/HN) ➔ FastAPI (Data Ingestion) ➔ Gemini AI (Inference & Scor
 
 ## 📸 Screenshots
 
-![Signal Dashboard](screenshots/dashboard1.png)
-![Signal Signals](screenshots/dashboard2.png)
+![alt text](screenshots/dashboard2.png)
+
+![alt text](screenshots/dashboard1.png)
 
 ## 🚀 Setup & Installation
 
